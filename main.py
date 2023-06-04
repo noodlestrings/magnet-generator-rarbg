@@ -6,7 +6,22 @@ def init_db(filename):
     cursor = conn.cursor()
     return (cursor, conn)
 
-def fetch_data(searchTerm, cursor):
+def get_filter_parameters():
+    filterParameters = {}
+    print("Please enter 'True' or 'False' for each option")
+    showOnly4k = input("Only see 4k torrents: ").lower() == "true"
+    show720p = input("See 720p torrents: ").lower() == "true"
+    show480p = input("See 480p torrents: ").lower() == "true"
+    showXvidFormat = input("See xvid format torrents: ").lower() == "true"
+
+    filterParameters["show-only-4k"] = showOnly4k
+    filterParameters["show-720p"] = show720p
+    filterParameters["show-480p"] = show480p
+    filterParameters["show-xvid-format"] = showXvidFormat
+
+    return filterParameters
+
+def fetch_data(searchTerm, cursor, **filters):
     searchTerm = "%" + searchTerm + "%"
     cursor.execute(
         "SELECT * FROM items WHERE title LIKE ? OR title LIKE ? AND cat LIKE ?", (searchTerm, searchTerm.replace(" ", "."), "movie%")
@@ -53,6 +68,8 @@ def clean_data(data):
         # if "720" in contents[3]:
         #     continue
 
+    
+
         cleanedData[id] = tuple(contents[:-2])
     return cleanedData
 
@@ -65,6 +82,7 @@ def magnetiser(hash, name):
 
 def main():
     cursor, conn = init_db("rarbg_db.sqlite")
+    print(get_filter_parameters())
     searchTerm = input("Enter a search term: ")
     data = clean_data(fetch_data(searchTerm, cursor))
     for item in data:
