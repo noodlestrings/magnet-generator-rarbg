@@ -2,7 +2,7 @@
 
 
 - [ ] update fetch_data() to also search using a period delimited string
-- [ ] write clean_data() function that cleans the data
+- [x] write clean_data() function that cleans the data
 - [ ] update fetch_data() so that it can search for a resolution
 - [ ] create an input_params() function to search for the movie, with given parameters such as resolution
 - [ ] write magnetiser() to generate the magnet link
