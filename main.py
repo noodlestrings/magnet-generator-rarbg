@@ -12,9 +12,14 @@ def get_filter_parameters():
     filterParameters = {}
     print("Please only enter 't' or 'f' for each option")
     showOnly4k = input("Only see 4k torrents: ").lower()[0] == "t"
-    show720p = input("See 720p torrents: ").lower()[0] == "t"
-    show480p = input("See 480p torrents: ").lower()[0] == "t"
-    showXvidFormat = input("See xvid format torrents: ").lower()[0] == "t"
+    if showOnly4k == False:
+        show720p = input("See 720p torrents: ").lower()[0] == "t"
+        show480p = input("See 480p torrents: ").lower()[0] == "t"
+        showXvidFormat = input("See xvid format torrents: ").lower()[0] == "t"
+    else:
+        show720p = False
+        show480p = False
+        showXvidFormat = False
 
     filterParameters["show-only-4k"] = showOnly4k
     filterParameters["show-720p"] = show720p
