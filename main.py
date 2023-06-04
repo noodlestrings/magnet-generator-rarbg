@@ -9,10 +9,11 @@ def init_db(filename):
 def fetch_data(searchTerm, cursor):
     searchTerm = "%" + searchTerm + "%"
     cursor.execute(
-        "SELECT * FROM items WHERE title LIKE ? AND cat LIKE ?", (searchTerm, "movie%")
+        "SELECT * FROM items WHERE title LIKE ? OR title LIKE ? AND cat LIKE ?", (searchTerm, searchTerm.replace(" ", "."), "movie%")
     )
     rows = cursor.fetchall()
-    # update to also search "film.title.name"
+
+
     return rows
 
 
@@ -47,6 +48,10 @@ def clean_data(data):
         # size in gb
         contents[4] /= 1073741824
         contents[4] = round(contents[4], 2)
+
+        # # removes 720p films
+        # if "720" in contents[3]:
+        #     continue
 
         cleanedData[id] = tuple(contents[:-2])
     return cleanedData
