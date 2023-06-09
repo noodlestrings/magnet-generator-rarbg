@@ -69,7 +69,8 @@ def clean_data(data, filters):
         contents = list(item)
         contents.remove(id)
 
-        if contents[4] == None:
+        # if the file size is None or 0
+        if contents[4] == None or contents[4] == 0:
             continue
 
         if contents[3].lower() == "xxx":
@@ -95,6 +96,9 @@ def clean_data(data, filters):
         cleanedData[id] = tuple(contents[:-2])
     return cleanedData
 
+def display_options():
+    pass
+
 
 def magnetiser(hash, name):
     pass
@@ -103,9 +107,10 @@ def magnetiser(hash, name):
 def main():
     cursor, conn = init_db("rarbg_db.sqlite")
     searchTerm = input("Enter a search term: ")
-    data = clean_data(fetch_data(searchTerm, cursor), get_filter_parameters())
-    for item in data:
-        print(data[item])
+    rawData = fetch_data(searchTerm, cursor)
+    filterParameters = get_filter_parameters()
+    cleanedData = clean_data(rawData, filterParameters)
+    display_options(cleanedData)
 
     conn.close()
 
