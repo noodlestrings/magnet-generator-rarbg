@@ -6,7 +6,7 @@
 - [x] create an input_params() function to search for the movie, with given parameters such as resolution
 - [x] update fetch_data() to use the input parameters
 - [x] display to the user the options they have in table format, and allow them to enter the id they want
-- [ ] write magnetiser() to generate the magnet link
+- [x] write magnetiser() to generate the magnet link
 - [ ] santise user's input
 - [ ] document functions
 
