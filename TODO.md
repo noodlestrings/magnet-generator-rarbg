@@ -7,7 +7,7 @@
 - [x] update fetch_data() to use the input parameters
 - [x] display to the user the options they have in table format, and allow them to enter the id they want
 - [x] write magnetiser() to generate the magnet link
-- [ ] santise user's input
+- [x] santise user's input
 - [ ] document functions
 
 ## Notes

@@ -4,6 +4,16 @@ import pyperclip
 
 
 def init_db(filename):
+    """
+    Initializes a SQLite database connection and creates a cursor object.
+
+    Args:
+        filename (str): The name of the database file.
+
+    Returns:
+        tuple: A tuple containing the cursor and connection objects.
+
+    """
     conn = sqlite3.connect(filename)
     # Create a cursor object
     cursor = conn.cursor()
@@ -11,6 +21,13 @@ def init_db(filename):
 
 
 def get_filter_parameters():
+    """
+    Prompts the user to enter filter parameters for the search.
+
+    Returns:
+        dict: A dictionary containing the filter parameters.
+
+    """
     filterParameters = {}
     print("Please only enter 'y' or 'n' for each option")
     showOnly4k = input("Only see 4k torrents: ").lower()[0] == "y"
@@ -32,6 +49,17 @@ def get_filter_parameters():
 
 
 def fetch_data(searchTerm, cursor):
+    """
+    Fetches data from the database based on the search term.
+
+    Args:
+        searchTerm (str): The search term to be used in the database query.
+        cursor (sqlite3.Cursor): The database cursor object.
+
+    Returns:
+        list: A list of tuples containing the fetched data.
+
+    """
     searchTerm = "%" + searchTerm + "%"
     cursor.execute(
         "SELECT * FROM items WHERE title LIKE ? OR title LIKE ? AND cat LIKE ?",
@@ -101,6 +129,13 @@ def clean_data(data, filters):
 
 
 def display_options(data):
+    """
+    Displays the options available based on the cleaned data, in a table, using the tabulate python library.
+
+    Args:
+        data (dict): A dictionary containing the cleaned film data.
+
+    """
     # {1265355: ('0FCF5037464BE46DABA29C7D90112FA737C8908A', 'Blade.Runner.1982.2160p.BluRay.x264.8bit.SDR.DTS-HD.MA.TrueHD.7.1.Atmos-SWTYBLZ',
     #  '2017-11-15 15:06:47', 'movies_x264_4k', 64.39),
 
@@ -128,6 +163,14 @@ def display_options(data):
 
 
 def magnetiser(hash, name):
+    """
+    Generates a magnet link for a given hash and name. Prints to screen, and copies to clipboard.
+
+    Args:
+        hash (str): The hash value.
+        name (str): The name of the film.
+
+    """
     # magnet:?xt=urn:btih:7B973E55B2198EAC530440DC7D9589DD708F5692&dn=Shrek+%282001%29+1080p+BrRip+x264+-+1GB-+YIFY
     # +s replace ' 's ??
     print("\n", "magnet:?xt=urn:btih:" + hash + "&dn=" + name.replace(" ", "+"))
