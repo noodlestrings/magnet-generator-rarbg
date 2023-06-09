@@ -60,7 +60,7 @@ def clean_data(data, filters):
         data = [(1, 'Film A', 2022, 'Action'),
                 (2, 'Film B', 2021, 'Drama')]
         cleaned_data = clean_data(data)
-        
+
         Result:
             cleaned_data = {1: ('Film A', 2022, 'Action'),
                          2: ('Film B', 2021, 'Drama')}
@@ -104,41 +104,37 @@ def display_options(data):
     # {1265355: ('0FCF5037464BE46DABA29C7D90112FA737C8908A', 'Blade.Runner.1982.2160p.BluRay.x264.8bit.SDR.DTS-HD.MA.TrueHD.7.1.Atmos-SWTYBLZ',
     #  '2017-11-15 15:06:47', 'movies_x264_4k', 64.39),
 
-
-    headers = ['id', 'title', 'category', 'size/GB']
+    headers = ["id", "title", "category", "size/GB"]
 
     # values to populate table with
     table = []
 
     for key, value in data.items():
         dataTemp = list(value)
-        del dataTemp[0] # remove hash from table
-        del dataTemp[1] # remove date from table
+        del dataTemp[0]  # remove hash from table
+        del dataTemp[1]  # remove date from table
         table.append([key] + dataTemp)
 
-    sortedTable = (sorted(table, key=lambda x: x[-1])) # sort by filesize
+    sortedTable = sorted(table, key=lambda x: x[-1])  # sort by filesize
     sortedTable.reverse()
     with open("torrent-options.txt", "w") as file:
         for entry in sortedTable:
-            line = ' '.join(str(element) for element in entry) 
-            file.write(line + '\n')
-            file.write("="*(len(line)+5))
-            file.write('\n')  
-
+            line = " ".join(str(element) for element in entry)
+            file.write(line + "\n")
+            file.write("=" * (len(line) + 5))
+            file.write("\n")
 
     print(Tabulate(sortedTable, headers=headers, tablefmt="grid"))
 
 
-
 def magnetiser(hash, name):
-
     # magnet:?xt=urn:btih:13EF3621F73E33EDCFDA6BC7BCEC1221526B1EBF&dn=Shrek+%282001%29+720p+
-    #magnet:?xt=urn:btih:7B973E55B2198EAC530440DC7D9589DD708F5692&dn=Shrek+%282001%29+1080p+BrRip+x264+-+1GB-+YIFY
+    # magnet:?xt=urn:btih:7B973E55B2198EAC530440DC7D9589DD708F5692&dn=Shrek+%282001%29+1080p+BrRip+x264+-+1GB-+YIFY
     # +s replace ' 's ??
-    print("\n", "magnet:?xt=urn:btih:"+hash+"&dn="+name.replace(' ', '+'))
+    print("\n", "magnet:?xt=urn:btih:" + hash + "&dn=" + name.replace(" ", "+"))
 
     # copies to clipboard
-    pyperclip.copy("magnet:?xt=urn:btih:"+hash+"&dn="+name.replace(' ', '+'))
+    pyperclip.copy("magnet:?xt=urn:btih:" + hash + "&dn=" + name.replace(" ", "+"))
     pyperclip.paste()
 
 
@@ -150,7 +146,9 @@ def main():
     cleanedData = clean_data(rawData, filterParameters)
     display_options(cleanedData)
     print("All of the returned torrents are available to see in 'torrent-options.txt'")
-    selectedID = int(input("Enter the id of the film to generate a magnet link for it: "))
+    selectedID = int(
+        input("Enter the id of the film to generate a magnet link for it: ")
+    )
     hash, title = cleanedData[selectedID][:2]
     magnetiser(hash, title)
 
