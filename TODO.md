@@ -8,7 +8,7 @@
 - [x] display to the user the options they have in table format, and allow them to enter the id they want
 - [x] write magnetiser() to generate the magnet link
 - [x] santise user's input
-- [ ] document functions
+- [x] document functions
 
 ## Notes
 
