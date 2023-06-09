@@ -12,12 +12,12 @@ def init_db(filename):
 
 def get_filter_parameters():
     filterParameters = {}
-    print("Please only enter 't' or 'f' for each option")
-    showOnly4k = input("Only see 4k torrents: ").lower()[0] == "t"
+    print("Please only enter 'y' or 'n' for each option")
+    showOnly4k = input("Only see 4k torrents: ").lower()[0] == "y"
     if showOnly4k == False:
-        show720p = input("See 720p torrents: ").lower()[0] == "t"
-        show480p = input("See 480p torrents: ").lower()[0] == "t"
-        showXvidFormat = input("See xvid format torrents: ").lower()[0] == "t"
+        show720p = input("See 720p torrents: ").lower()[0] == "y"
+        show480p = input("See 480p torrents: ").lower()[0] == "y"
+        showXvidFormat = input("See xvid format torrents: ").lower()[0] == "y"
     else:
         show720p = False
         show480p = False
@@ -139,19 +139,38 @@ def magnetiser(hash, name):
 
 def main():
     cursor, conn = init_db("rarbg_db.sqlite")
-    searchTerm = input("Enter a search term: ")
+
+    valid = False
+    while not valid:
+        searchTerm = input("Enter a search term: ")
+        if searchTerm != "" or searchTerm != " ":
+            valid = True
+
     rawData = fetch_data(searchTerm, cursor)
     filterParameters = get_filter_parameters()
     cleanedData = clean_data(rawData, filterParameters)
+
+    if len(cleanedData) == 0:
+        print("The selected options did not return any results")
+        exit()
+
     display_options(cleanedData)
     print("All of the returned torrents are available to see in 'torrent-options.txt'")
-    selectedID = int(
-        input("Enter the id of the film to generate a magnet link for it: ")
-    )
-    hash, title = cleanedData[selectedID][:2]
-    magnetiser(hash, title)
 
-    conn.close()
+    while True:
+        try:
+            selectedID = int(
+                input("Enter the id of the film to generate a magnet link for it: ")
+            )
+            hash, title = cleanedData[selectedID][:2]
+            magnetiser(hash, title)
+
+            conn.close()
+            break
+        except ValueError:
+            print("\nYou did not enter a numerical id, please try again")
+        except KeyError:
+            print("\nThat id does not exist, please try again")
 
 
 if __name__ == "__main__":
