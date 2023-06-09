@@ -1,4 +1,5 @@
 import sqlite3
+from tabulate import tabulate as Tabulate
 
 
 def init_db(filename):
@@ -96,8 +97,29 @@ def clean_data(data, filters):
         cleanedData[id] = tuple(contents[:-2])
     return cleanedData
 
-def display_options():
-    pass
+
+def display_options(data):
+    # {1265355: ('0FCF5037464BE46DABA29C7D90112FA737C8908A', 'Blade.Runner.1982.2160p.BluRay.x264.8bit.SDR.DTS-HD.MA.TrueHD.7.1.Atmos-SWTYBLZ',
+    #  '2017-11-15 15:06:47', 'movies_x264_4k', 64.39),
+
+
+    headers = ['id', 'title', 'category', 'size/GB']
+
+    # values to populate table with
+    table = []
+
+    for key, value in data.items():
+        dataTemp = list(value)
+        del dataTemp[0] # remove hash from table
+        del dataTemp[1] # remove date from table
+        table.append([key] + dataTemp)
+
+    sortedTable = (sorted(table, key=lambda x: x[-1])) # sort by filesize
+    sortedTable.reverse()
+
+
+    print(Tabulate(sortedTable, headers=headers, tablefmt="grid"))
+
 
 
 def magnetiser(hash, name):
