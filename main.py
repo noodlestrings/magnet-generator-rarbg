@@ -53,15 +53,16 @@ def clean_data(data, filters):
     Returns:
         dict: A dictionary where the ID of each tuple is the key, and the value is a tuple
               containing the cleaned film details.
-        example format: {id: (HASH, TITLE, DATE_OF_UPLOAD, CATEGORY, SIZE_IN_GB)}
+            format: {id: (HASH, TITLE, DATE_OF_UPLOAD, CATEGORY, SIZE_IN_GB)}
 
     Example:
         data = [(1, 'Film A', 2022, 'Action'),
                 (2, 'Film B', 2021, 'Drama')]
         cleaned_data = clean_data(data)
-        # Result:
-        # cleaned_data = {1: ('Film A', 2022, 'Action'),
-        #                 2: ('Film B', 2021, 'Drama')}
+        
+        Result:
+            cleaned_data = {1: ('Film A', 2022, 'Action'),
+                         2: ('Film B', 2021, 'Drama')}
     """
 
     cleanedData = {}
@@ -116,6 +117,12 @@ def display_options(data):
 
     sortedTable = (sorted(table, key=lambda x: x[-1])) # sort by filesize
     sortedTable.reverse()
+    with open("torrent-options.txt", "w") as file:
+        for entry in sortedTable:
+            line = ' '.join(str(element) for element in entry) 
+            file.write(line + '\n')
+            file.write("="*(len(line)+5))
+            file.write('\n')  
 
 
     print(Tabulate(sortedTable, headers=headers, tablefmt="grid"))
@@ -123,7 +130,9 @@ def display_options(data):
 
 
 def magnetiser(hash, name):
-    pass
+
+    # magnet:?xt=urn:btih:13EF3621F73E33EDCFDA6BC7BCEC1221526B1EBF&dn=Shrek+%282001%29+720p+
+    print(hash, name)
 
 
 def main():
@@ -133,6 +142,10 @@ def main():
     filterParameters = get_filter_parameters()
     cleanedData = clean_data(rawData, filterParameters)
     display_options(cleanedData)
+    print("All of the returned torrents are available to see in 'torrent-options.txt'")
+    selectedID = int(input("Enter the id of the film to generate a magnet link for it: "))
+    hash, title = cleanedData[selectedID][:2]
+    magnetiser(hash, title)
 
     conn.close()
 
