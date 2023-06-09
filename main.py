@@ -1,5 +1,6 @@
 import sqlite3
 from tabulate import tabulate as Tabulate
+import pyperclip
 
 
 def init_db(filename):
@@ -132,7 +133,13 @@ def display_options(data):
 def magnetiser(hash, name):
 
     # magnet:?xt=urn:btih:13EF3621F73E33EDCFDA6BC7BCEC1221526B1EBF&dn=Shrek+%282001%29+720p+
-    print(hash, name)
+    #magnet:?xt=urn:btih:7B973E55B2198EAC530440DC7D9589DD708F5692&dn=Shrek+%282001%29+1080p+BrRip+x264+-+1GB-+YIFY
+    # +s replace ' 's ??
+    print("\n", "magnet:?xt=urn:btih:"+hash+"&dn="+name.replace(' ', '+'))
+
+    # copies to clipboard
+    pyperclip.copy("magnet:?xt=urn:btih:"+hash+"&dn="+name.replace(' ', '+'))
+    pyperclip.paste()
 
 
 def main():
