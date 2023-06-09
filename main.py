@@ -5,7 +5,7 @@ import pyperclip
 
 def init_db(filename):
     """
-    Initializes a SQLite database connection and creates a cursor object.
+    Initializes an SQLite database connection and creates a cursor object.
 
     Args:
         filename (str): The name of the database file.
